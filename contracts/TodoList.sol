@@ -12,7 +12,7 @@ contract TodoList {
     }
 
     Task[] public tasks;
-    mapping (address => uint256) userToTaskCount;
+    mapping (address => uint256) public userToTaskCount;
 
     // creates new task specific to user making the transaction
     function createTask(string memory _content) public {
