@@ -5,7 +5,6 @@
 	--grey: #6B7280;
 	--cyan: #6DFFE7;
   --teal: #55BEC0;
-	--purple: #8B5CF6;
   --blue: #5073D9;
 	--light: #EEE;
 }
@@ -13,7 +12,7 @@
 * {
 	margin: 0;
 	box-sizing: border-box;
-	font-family: "Fira sans", sans-serif;
+	font-family: "Poppins";
 }
 
 body {
