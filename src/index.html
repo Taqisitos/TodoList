@@ -64,7 +64,10 @@
 
     <!-- js ext files -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
-	<script src="app.js"></script>
+	<script src="https://unpkg.com/web3@latest/dist/web3.min.js"></script>
+	<!-- The legacy-web3 script must run BEFORE your other scripts. -->
+    <script src="https://unpkg.com/@metamask/legacy-web3@latest/dist/metamask.web3.min.js"></script>
+	<script type="module" src="app.js"></script>
     <!-- <script src="vendor/bootstrap/dist/js/bootstrap.min.js"></script> -->
     <!-- <script src="vendor/truffle-contract/dist/truffle-contract.js"></script> -->
 </body>

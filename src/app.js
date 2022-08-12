@@ -1,3 +1,5 @@
+import TodoList from "/build/contracts/TodoList.json" assert { type: "json" };
+
 // gets called when user clicks "Connect Wallet"
 async function connectWallet() {
   accounts = await window.ethereum.request({method: "eth_requestAccounts"}).catch((err) => {
@@ -9,60 +11,42 @@ async function connectWallet() {
    document.getElementById("connect-btn").innerHTML = accounts;
 }
 
-App = {
-    load: async () => {
-        console.log("dApp loading ...");
-        await App.connectToBlockchain();
-        await App.loadAccount();
-    },
 
+var todoList; // will be the contract object
 
-    connectToBlockchain: async () => {
-        if (typeof window.ethereum !== 'undefined') {
-          App.web3Provider = window.ethereum.currentProvider
-          //window.ethereum = new Web3(window.ethereum.currentProvider)
-        } else {
-          window.alert("Please connect to Metamask.")
-          // TODO: functionality for user pressing connect wallet button
-        //   const ethereumButton = document.querySelector('.enableEthereumButton');
-        //   ethereumButton.addEventListener('click', () => {
-        //     //Will Start the metamask extension
-        //     ethereum.request({ method: 'eth_requestAccounts' });
-        //   });
-        }
-        // Modern dapp browsers...
-        if (window.ethereum) {
-          window.web3 = new Web3(ethereum)
-          try {
-            // Request account access if needed
-            await ethereum.enable()
-            // Acccounts now exposed
-            web3.eth.sendTransaction({/* ... */})
-          } catch (error) {
-            // User denied account access...
-          }
-        }
-        // Legacy dapp browsers...
-        else if (window.web3) {
-          App.web3Provider = web3.currentProvider
-          window.web3 = new Web3(web3.currentProvider)
-          // Acccounts always exposed
-          web3.eth.sendTransaction({/* ... */})
-        }
-        // Non-dapp browsers...
-        else {
-          console.log('Non-Ethereum browser detected. You should consider trying MetaMask!')
-        }
-      },
-
-      loadAccount: async () => {
-        App.account = web3.eth.accounts[0];
-        console.log(App.account);
-      }
+function startApp() {
+  console.log("starting dApp");
+  var todoListContractAddress = "0x3CfdFd1e9953bab02808Ee1EFdd3C1bB78804FaD";
+  todoList = new web3.eth.Contract(TodoList.abi, todoListContractAddress);
 }
 
-$(() => {
-    $(window).load(() => {
-        App.load();
-    })
-})
+
+function displayTasks() {
+
+}
+
+function createTask() {
+
+}
+
+function markTaskComplete() {
+
+}
+
+
+// logic starts here
+window.addEventListener('load', function() {
+  console.log("dApp loading ...");
+
+  // check if web3 has been injected by browser
+  if (this.window.ethereum !== 'undefined') {
+    console.log("web3 has been injected :)");
+    const web3 = new Web3(Web3.givenProvider);
+  } else {
+    this.alert("Install metamask or else Roshan will be sad :'(");
+  }
+
+  startApp();
+});
+
+
