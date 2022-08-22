@@ -28,6 +28,8 @@ contract TodoList {
         tasks[id].completed = true;
     }
 
+    // TODO: POTENTIAL BUG! - view functions don't make transactions, so msg.sender can be faked (no private key required)
+    // TODO: but this is a todo list so maybe just leave it and use as education example
     // gives user making the transaction an array of all task ids they own
     function getTasksByOwner() external view returns (uint[] memory) {
         uint counter = 0;

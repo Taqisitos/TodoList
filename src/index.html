@@ -35,7 +35,8 @@
 			<input 
 				type="submit"
 				id="new-task-submit" 
-				value="Add task" />
+				value="Add task"
+				onclick="makeTask(document.getElementById('new-task-input').value)" />
 		</form>
 	</header>
 	<main>
@@ -67,7 +68,7 @@
 	<script src="https://unpkg.com/web3@latest/dist/web3.min.js"></script>
 	<!-- The legacy-web3 script must run BEFORE your other scripts. -->
     <script src="https://unpkg.com/@metamask/legacy-web3@latest/dist/metamask.web3.min.js"></script>
-	<script type="module" src="app.js"></script>
+	<script type = "module" src="app.js"></script>
     <!-- <script src="vendor/bootstrap/dist/js/bootstrap.min.js"></script> -->
     <!-- <script src="vendor/truffle-contract/dist/truffle-contract.js"></script> -->
 </body>
