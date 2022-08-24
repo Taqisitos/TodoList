@@ -4,6 +4,8 @@ var todoList; // will be the contract object
 var userAccount; // current active user
 var accounts; // all accounts
 
+var walletConnected = false;
+
 // gets called when user clicks "Connect Wallet"
 async function connectWallet() {
   accounts = await window.ethereum.request({method: "eth_requestAccounts"}).catch((err) => {
@@ -12,6 +14,7 @@ async function connectWallet() {
    });
    
    userAccount = accounts[0];
+   walletConnected = true;
    console.log(userAccount);
    document.getElementById("connect-btn").innerHTML = accounts;
    getTasksByOwner()
@@ -19,6 +22,7 @@ async function connectWallet() {
 }
 window.connectWallet = connectWallet; // js module thing, set connect wallet to be global
 
+// web3 connected - start app
 async function startApp() {
   console.log("starting dApp");
   const todoListContractAddress = "0xa277b064B6c7aE9Bc60f0AcCEc0743a0dA05CeA4";
@@ -29,23 +33,25 @@ async function startApp() {
   var accountInterval = setInterval(async function() {
     // Check if account has changed
     
-    accounts = await window.ethereum.request({method: "eth_requestAccounts"}).catch((err) => {
-      // error handle
-      console.log(err.code);
-    });
-    if (accounts[0] !== userAccount) {
-      console.log("accounts[0] !== userAccount");
-      userAccount = accounts[0];
-      // Call a function to update the UI with the new account
-      getTasksByOwner()
-      .then(displayTasks);
+    if (walletConnected) {
+      accounts = await window.ethereum.request({method: "eth_requestAccounts"}).catch((err) => {
+        // error handle
+        console.log(err.code);
+      });
+
+      if (accounts[0] !== userAccount) {
+        console.log("accounts[0] !== userAccount");
+        userAccount = accounts[0];
+        // Call a function to update the UI with the new account
+        getTasksByOwner()
+        .then(displayTasks);
+      }
     }
   }, 100);
 }
 
 function getTasksByOwner() {
   console.log("getTasksByOwner");
-  // TODO: error on ln 49. 
   return todoList.methods.getTasksByOwner().call({from: userAccount});
 }
 
@@ -61,22 +67,24 @@ function displayTasks(ids) {
   for (let id of ids) {
     getTask(id)
     .then(function(task) {
-      // add html form of task
-      $("#tasks").append(`
-      <div class="task" id="${task.id}">
-        <div class="content">
-          <input 
-            type="text" 
-            class="text" 
-            value="${task.content}"
-            readonly>
-        </div>
-        <div class="actions">
-            <button class="edit">Edit</button>
-            <button onclick="markTaskComplete(${task.id})" class="delete">Delete</button>
-        </div>
-      </div>`
-      );
+      if (task.completed == false) {
+        // add html form of task
+        $("#tasks").append(`
+        <div class="task" id="${task.id}">
+          <div class="content">
+            <input 
+              type="text" 
+              class="text" 
+              value="${task.content}"
+              readonly>
+          </div>
+          <div class="actions">
+              <button class="edit">Edit</button>
+              <button onclick="markTaskComplete(${task.id})" class="delete">Delete</button>
+          </div>
+        </div>`
+        );
+      }
     });
   }
 }
@@ -91,7 +99,10 @@ function makeTask(taskContent) {
 window.makeTask = makeTask;
 
 function markTaskComplete(taskId) {
-  todoList.methods.markComplete(taskId).send({from: userAccount});
+  todoList.methods.markComplete(taskId).send({from: userAccount})
+  .on('transactionHash', function(){
+    $("#" + taskId).remove();
+  });
 }
 window.markTaskComplete = markTaskComplete;
 
