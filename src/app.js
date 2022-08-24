@@ -50,11 +50,14 @@ async function startApp() {
   }, 100);
 }
 
+// returns list of all tasks owned by userAccount
 function getTasksByOwner() {
   console.log("getTasksByOwner");
   return todoList.methods.getTasksByOwner().call({from: userAccount});
 }
 
+// precon: getTasksByOwner() must be called first, result passed into this function
+// displays tasks owned by userAccount
 function displayTasks(ids) {
   console.log("displayTasks() called");
   $("#tasks").empty();
@@ -79,7 +82,6 @@ function displayTasks(ids) {
               readonly>
           </div>
           <div class="actions">
-              <button class="edit">Edit</button>
               <button onclick="markTaskComplete(${task.id})" class="delete">Delete</button>
           </div>
         </div>`
@@ -89,18 +91,25 @@ function displayTasks(ids) {
   }
 }
 
+// return the task with id id
 function getTask(id) {
   return todoList.methods.tasks(id).call();
 }
 
+// create new task and refresh page
 function makeTask(taskContent) {
-  todoList.methods.createTask(taskContent).send({from: userAccount});
+  todoList.methods.createTask(taskContent).send({from: userAccount})
+  .on('transactionHash', function() {
+    getTasksByOwner()
+    .then(displayTasks);
+  });
 }
 window.makeTask = makeTask;
 
+// mark task with id taskId complete and refresh page
 function markTaskComplete(taskId) {
   todoList.methods.markComplete(taskId).send({from: userAccount})
-  .on('transactionHash', function(){
+  .on('transactionHash', function() {
     $("#" + taskId).remove();
   });
 }
