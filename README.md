@@ -1,5 +1,5 @@
 # TodoList
 
-Simple web3 todo list
+This project is being used for education purposes by Texas Blockchain Engineering at the University of Texas at Austin.
 
-yuh yuh
+Simple todo list connected to the Ethereum network
