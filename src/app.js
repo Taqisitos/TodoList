@@ -120,6 +120,8 @@ window.markTaskComplete = markTaskComplete;
 window.addEventListener('load', function() {
   console.log("dApp loading ...");
 
+  document.getElementById("connect-btn").addEventListener("click", connectWallet);
+
   // check if web3 has been injected by browser
   if (this.window.ethereum !== 'undefined') {
     console.log("web3 has been injected :)");
