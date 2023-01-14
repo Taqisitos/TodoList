@@ -25,7 +25,7 @@ window.connectWallet = connectWallet; // js module thing, set connect wallet to 
 // web3 connected - start app
 async function startApp() {
   console.log("starting dApp");
-  const todoListContractAddress = "0xa277b064B6c7aE9Bc60f0AcCEc0743a0dA05CeA4";
+  const todoListContractAddress = "0xDd9FC4112c33B09694d014ff9a33ef4d64873C3C";
   const contractABI = abi.abi;
   todoList = new web3.eth.Contract(contractABI, todoListContractAddress);
 
